@@ -1,0 +1,22 @@
+[Unit]
+Description=Claude Remote Control launcher (workspace picker -> remote-control session)
+After=network-online.target
+Wants=network-online.target
+
+# Edit User/Group/paths below for your host before installing.
+[Service]
+Type=simple
+User=youruser
+Group=youruser
+WorkingDirectory=/path/to/cc-launcher
+# ~/.local/bin = claude; /usr/bin = tmux. HOME so claude reads ~/.claude.
+Environment=HOME=/home/youruser
+Environment=PATH=/home/youruser/.local/bin:/usr/local/bin:/usr/bin:/bin
+# NOTE: no PrivateTmp — the launcher's tmux sessions live on the shared user
+# tmux socket so you can `tmux attach -t cc-<name>` from a terminal.
+ExecStart=/usr/bin/python3 app.py
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
